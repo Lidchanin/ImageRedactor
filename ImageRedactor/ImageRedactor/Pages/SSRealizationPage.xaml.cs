@@ -27,7 +27,7 @@ namespace ImageRedactor.Pages
 
             _photoBmp = SKBitmap.Decode(photoStream);
 
-            bitmap = new TouchManipulationBitmap(Utils.LoadBitmapResource("ImageRedactor.Images.banana1.png"));
+            bitmap = new TouchManipulationBitmap(BitmapExtensions.LoadBitmapResource("ImageRedactor.Images.banana1.png"));
             bitmap.TouchManager.Mode = TouchManipulationMode.ScaleRotate;
 
             Content = _skiaView;
