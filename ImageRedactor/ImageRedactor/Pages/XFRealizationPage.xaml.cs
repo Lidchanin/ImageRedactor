@@ -9,7 +9,6 @@ using Xamarin.Forms.Xaml;
 
 namespace ImageRedactor.Pages
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class XFRealizationPage : ContentPage
 	{
 		public XFRealizationPage ()
