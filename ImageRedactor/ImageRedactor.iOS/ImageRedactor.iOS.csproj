@@ -95,6 +95,8 @@
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Effects\TouchEffect.cs" />
+    <Compile Include="Effects\TouchRecognizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -153,8 +155,11 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\ImageRedactor\ImageRedactor.csproj">
-      <Project>{A99C992C-2FC8-4A71-AD70-4C5E536022CD}</Project>
+      <Project>{22E52CAD-B1A2-4F17-BA8C-8AE9206F0999}</Project>
       <Name>ImageRedactor</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Effects\" />
   </ItemGroup>
 </Project>
