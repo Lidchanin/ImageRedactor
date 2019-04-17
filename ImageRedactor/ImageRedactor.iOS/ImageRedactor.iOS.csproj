@@ -160,6 +160,75 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Effects\" />
+    <BundleResource Include="Resources\banana1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\banana1%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\banana1%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\banana3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\banana3%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\banana3%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\mask1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\mask1%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\mask1%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\mask2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\mask2%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\mask2%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\mask3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\mask3%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\mask3%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\monkey1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\monkey1%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\monkey1%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\monkey2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\monkey2%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\monkey2%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\monkey3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\monkey3%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\monkey3%403x.png" />
   </ItemGroup>
 </Project>
