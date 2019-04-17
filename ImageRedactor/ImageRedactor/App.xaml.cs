@@ -1,11 +1,10 @@
-﻿using System;
-using Xamarin.Forms;
+﻿using ImageRedactor.Pages;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace ImageRedactor
 {
-    public partial class App : Application
+    public partial class App
     {
         public App()
         {
