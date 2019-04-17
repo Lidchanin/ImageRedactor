@@ -41,7 +41,7 @@ namespace ImageRedactor.Pages
 
             canvas.Clear();
 
-            canvas.DrawBitmap(_photoBmp, info.Rect);
+            canvas.DrawBitmap(_photoBmp, info.Rect, BitmapStretch.Uniform);
 
             bitmap.Paint(canvas);
 
