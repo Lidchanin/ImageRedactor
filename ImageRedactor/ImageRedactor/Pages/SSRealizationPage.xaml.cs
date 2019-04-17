@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SkiaSharp.Views.Forms;
+﻿using SkiaSharp.Views.Forms;
+using System.IO;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace ImageRedactor.Pages
 {
-	public partial class SSRealizationPage : ContentPage
+    public partial class SSRealizationPage : ContentPage
 	{
         SKCanvasView _skiaView;
 
-		public SSRealizationPage ()
+		public SSRealizationPage(Stream photoStream)
 		{
 			InitializeComponent ();
 

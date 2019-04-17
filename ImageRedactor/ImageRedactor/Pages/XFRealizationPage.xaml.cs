@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using System.IO;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace ImageRedactor.Pages
 {
-	public partial class XFRealizationPage : ContentPage
+    public partial class XFRealizationPage : ContentPage
 	{
-		public XFRealizationPage ()
+		public XFRealizationPage(Stream photoStream)
 		{
 			InitializeComponent ();
 		}
