@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SkiaSharp;
+using SkiaSharp.Views.Forms;
 
 namespace ImageRedactor
 {
@@ -52,11 +53,11 @@ namespace ImageRedactor
             return false;
         }
 
-        public void ProcessTouchEvent(long id, TouchActionType type, SKPoint location)
+        public void ProcessTouchEvent(long id, SKTouchAction type, SKPoint location)
         {
             switch (type)
             {
-                case TouchActionType.Pressed:
+                case SKTouchAction.Pressed:
                     touchDictionary.Add(id, new TouchManipulationInfo
                     {
                         PreviousPoint = location,
@@ -64,7 +65,7 @@ namespace ImageRedactor
                     });
                     break;
 
-                case TouchActionType.Moved:
+                case SKTouchAction.Moved:
                     TouchManipulationInfo info = touchDictionary[id];
                     info.NewPoint = location;
 
@@ -76,13 +77,13 @@ namespace ImageRedactor
                     info.PreviousPoint = info.NewPoint;
                     break;
 
-                case TouchActionType.Released:
+                case SKTouchAction.Released:
                     touchDictionary[id].NewPoint = location;
                     Manipulate();
                     touchDictionary.Remove(id);
                     break;
 
-                case TouchActionType.Cancelled:
+                case SKTouchAction.Cancelled:
                     touchDictionary.Remove(id);
                     break;
             }

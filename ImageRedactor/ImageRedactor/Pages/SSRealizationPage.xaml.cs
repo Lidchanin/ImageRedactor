@@ -33,20 +33,19 @@ namespace ImageRedactor.Pages
 
             var grid = new Grid();
             grid.Children.Add(_skiaView);
-            grid.Children.Add(box);
+            //grid.Children.Add(box);
 
             Content = grid;
 
-            var panRecognizer = new PanGestureRecognizer();
-            panRecognizer.PanUpdated += PanRecognizer_PanUpdated;
+            //var panRecognizer = new PanGestureRecognizer();
+            //panRecognizer.PanUpdated += PanRecognizer_PanUpdated;
 
-            var pinchRecognizer = new PinchGestureRecognizer();
-            pinchRecognizer.PinchUpdated += PinchRecognizer_PinchUpdated;
+            //var pinchRecognizer = new PinchGestureRecognizer();
+            //pinchRecognizer.PinchUpdated += PinchRecognizer_PinchUpdated;
 
-            box.GestureRecognizers.Add(panRecognizer);
-            box.GestureRecognizers.Add(pinchRecognizer);
-
-            //_skiaView.Touch += _skiaView_Touch;
+            //box.GestureRecognizers.Add(panRecognizer);
+            //box.GestureRecognizers.Add(pinchRecognizer);
+            _skiaView.Touch += _skiaView_Touch;
         }
 
         void SkiaViewPaintSurfaceHangle(object sender, SKPaintSurfaceEventArgs e)
@@ -64,40 +63,40 @@ namespace ImageRedactor.Pages
 
         void Handle_TouchAction(object sender, TouchActionEventArgs args)
         {
-            Point pt = args.Location;
-            SKPoint point =
-                new SKPoint((float)(_skiaView.CanvasSize.Width * pt.X / _skiaView.Width),
-                            (float)(_skiaView.CanvasSize.Height * pt.Y / _skiaView.Height));
+            //Point pt = args.Location;
+            //SKPoint point =
+            //    new SKPoint((float)(_skiaView.CanvasSize.Width * pt.X / _skiaView.Width),
+            //                (float)(_skiaView.CanvasSize.Height * pt.Y / _skiaView.Height));
 
-            switch (args.Type)
-            {
-                case TouchActionType.Pressed:
-                    if (bitmap.HitTest(point))
-                    {
-                        touchIds.Add(args.Id);
-                        bitmap.ProcessTouchEvent(args.Id, args.Type, point);
-                        break;
-                    }
-                    break;
+            //switch (args.Type)
+            //{
+            //    case TouchActionType.Pressed:
+            //        if (bitmap.HitTest(point))
+            //        {
+            //            touchIds.Add(args.Id);
+            //            bitmap.ProcessTouchEvent(args.Id, args.Type, point);
+            //            break;
+            //        }
+            //        break;
 
-                case TouchActionType.Moved:
-                    if (touchIds.Contains(args.Id))
-                    {
-                        bitmap.ProcessTouchEvent(args.Id, args.Type, point);
-                        _skiaView.InvalidateSurface();
-                    }
-                    break;
+            //    case TouchActionType.Moved:
+            //        if (touchIds.Contains(args.Id))
+            //        {
+            //            bitmap.ProcessTouchEvent(args.Id, args.Type, point);
+            //            _skiaView.InvalidateSurface();
+            //        }
+            //        break;
 
-                case TouchActionType.Released:
-                case TouchActionType.Cancelled:
-                    if (touchIds.Contains(args.Id))
-                    {
-                        bitmap.ProcessTouchEvent(args.Id, args.Type, point);
-                        touchIds.Remove(args.Id);
-                        _skiaView.InvalidateSurface();
-                    }
-                    break;
-            }
+            //    case TouchActionType.Released:
+            //    case TouchActionType.Cancelled:
+            //        if (touchIds.Contains(args.Id))
+            //        {
+            //            bitmap.ProcessTouchEvent(args.Id, args.Type, point);
+            //            touchIds.Remove(args.Id);
+            //            _skiaView.InvalidateSurface();
+            //        }
+            //        break;
+            //}
         }
 
         void HandleAction(View arg1, object arg2)
@@ -164,6 +163,41 @@ namespace ImageRedactor.Pages
         {
             Console.WriteLine($"SkiaTouch:\nActionType: {e.ActionType}\nDeviceType: {e.DeviceType}\nId: {e.Id}\nLocation: {e.Location}");
             e.Handled = true;
+
+            Point pt = e.Location.ToFormsPoint();
+            SKPoint point = e.Location;
+                //new SKPoint((float)(_skiaView.CanvasSize.Width * pt.X / _skiaView.Width),
+                //(float)(_skiaView.CanvasSize.Height * pt.Y / _skiaView.Height));
+
+            switch (e.ActionType)
+            {
+                case SKTouchAction.Pressed:
+                    if (bitmap.HitTest(point))
+                    {
+                        touchIds.Add(e.Id);
+                        bitmap.ProcessTouchEvent(e.Id, e.ActionType, point);
+                        break;
+                    }
+                    break;
+
+                case SKTouchAction.Moved:
+                    if (touchIds.Contains(e.Id))
+                    {
+                        bitmap.ProcessTouchEvent(e.Id, e.ActionType, point);
+                        _skiaView.InvalidateSurface();
+                    }
+                    break;
+
+                case SKTouchAction.Released:
+                case SKTouchAction.Cancelled:
+                    if (touchIds.Contains(e.Id))
+                    {
+                        bitmap.ProcessTouchEvent(e.Id, e.ActionType, point);
+                        touchIds.Remove(e.Id);
+                        _skiaView.InvalidateSurface();
+                    }
+                    break;
+            }
         }
     }
 }
