@@ -18,6 +18,13 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Images\banana1.png" />
+    <EmbeddedResource Include="Images\banana3.png" />
+    <EmbeddedResource Include="Images\mask1.png" />
+    <EmbeddedResource Include="Images\mask2.png" />
+    <EmbeddedResource Include="Images\mask3.png" />
+    <EmbeddedResource Include="Images\monkey1.png" />
+    <EmbeddedResource Include="Images\monkey2.png" />
+    <EmbeddedResource Include="Images\monkey3.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Pages\SSRealizationPage.xaml">
@@ -31,5 +38,15 @@
     <Folder Include="Effects\" />
     <Folder Include="Images\" />
     <Folder Include="SkiaUtils\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Images\banana1.png" />
+    <None Remove="Images\banana3.png" />
+    <None Remove="Images\mask1.png" />
+    <None Remove="Images\mask2.png" />
+    <None Remove="Images\mask3.png" />
+    <None Remove="Images\monkey1.png" />
+    <None Remove="Images\monkey2.png" />
+    <None Remove="Images\monkey3.png" />
   </ItemGroup>
 </Project>
