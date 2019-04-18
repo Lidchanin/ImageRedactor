@@ -9,7 +9,7 @@
         
     </ContentPage.Content>
     
-    <ContentPage.Effects>
+    <!--<ContentPage.Effects>
         <local:TouchEffect Capture="True" TouchAction="Handle_TouchAction" />
-    </ContentPage.Effects>
+    </ContentPage.Effects>-->
 </ContentPage>

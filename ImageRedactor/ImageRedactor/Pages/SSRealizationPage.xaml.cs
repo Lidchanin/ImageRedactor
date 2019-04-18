@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
@@ -13,7 +10,7 @@ namespace ImageRedactor.Pages
     public partial class SSRealizationPage : ContentPage
     {
         SKCanvasView _skiaView;
-        TouchManipulationBitmap bitmap;
+        GestureManipulationBitmap bitmap;
         List<long> touchIds = new List<long>();
 
         SKBitmap _photoBmp;
@@ -24,13 +21,32 @@ namespace ImageRedactor.Pages
 
             _skiaView = new SKCanvasView();
             _skiaView.PaintSurface += SkiaViewPaintSurfaceHangle;
+            _skiaView.EnableTouchEvents = true;
 
-            _photoBmp = SKBitmap.Decode(photoStream);
+            _photoBmp = BitmapExtensions.LoadBitmapResource("ImageRedactor.Images.banana1.png"); //SKBitmap.Decode(photoStream);
 
-            bitmap = new TouchManipulationBitmap(BitmapExtensions.LoadBitmapResource("ImageRedactor.Images.banana1.png"));
+            bitmap = new GestureManipulationBitmap(BitmapExtensions.LoadBitmapResource("ImageRedactor.Images.banana1.png"));
             bitmap.TouchManager.Mode = TouchManipulationMode.ScaleRotate;
 
-            Content = _skiaView;
+            var box = new BoxView();
+            box.BackgroundColor = Color.Transparent;
+
+            var grid = new Grid();
+            grid.Children.Add(_skiaView);
+            grid.Children.Add(box);
+
+            Content = grid;
+
+            var panRecognizer = new PanGestureRecognizer();
+            panRecognizer.PanUpdated += PanRecognizer_PanUpdated;
+
+            var pinchRecognizer = new PinchGestureRecognizer();
+            pinchRecognizer.PinchUpdated += PinchRecognizer_PinchUpdated;
+
+            box.GestureRecognizers.Add(panRecognizer);
+            box.GestureRecognizers.Add(pinchRecognizer);
+
+            //_skiaView.Touch += _skiaView_Touch;
         }
 
         void SkiaViewPaintSurfaceHangle(object sender, SKPaintSurfaceEventArgs e)
@@ -44,8 +60,6 @@ namespace ImageRedactor.Pages
             canvas.DrawBitmap(_photoBmp, info.Rect, BitmapStretch.Uniform);
 
             bitmap.Paint(canvas);
-
-            //canvas.DrawBitmap(_image, info.Rect);
         }
 
         void Handle_TouchAction(object sender, TouchActionEventArgs args)
@@ -84,6 +98,72 @@ namespace ImageRedactor.Pages
                     }
                     break;
             }
+        }
+
+        void HandleAction(View arg1, object arg2)
+        {
+        }
+
+        void PanRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e)
+        {
+            Console.WriteLine($"Pan: {new SKPoint((float)e.TotalX, (float)e.TotalY)}");
+            //Point pt = .Location;
+            //SKPoint point =
+            //new SKPoint((float)(_skiaView.CanvasSize.Width * pt.X / _skiaView.Width),
+            //(float)(_skiaView.CanvasSize.Height * pt.Y / _skiaView.Height));
+
+            switch (e.StatusType)
+            {
+                case GestureStatus.Started:
+                    //if (bitmap.HitTest(point))
+                    //{
+                    //    touchIds.Add(args.Id);
+                    //    bitmap.ProcessTouchEvent(args.Id, args.Type, point);
+                    //    break;
+                    //}
+                    break;
+                case GestureStatus.Running:
+                    break;
+                case GestureStatus.Canceled:
+                case GestureStatus.Completed:
+                    break;
+            }
+        }
+
+        float _currentScale = 1;
+        float _startScale;
+
+        void PinchRecognizer_PinchUpdated(object sender, PinchGestureUpdatedEventArgs e)
+        {
+            switch (e.Status)
+            {
+                case GestureStatus.Started:
+                    _startScale = _currentScale;
+                    //if (bitmap.HitTest(point))
+                    //{
+                    //    touchIds.Add(args.Id);
+                    //    bitmap.ProcessTouchEvent(args.Id, args.Type, point);
+                    //    break;
+                    //}
+                    break;
+                case GestureStatus.Running:
+                    _currentScale += ((float)e.Scale - 1f) * _startScale;
+                    //_currentScale = Math.Max(0f, _currentScale);
+
+                    break;
+                case GestureStatus.Canceled:
+                case GestureStatus.Completed:
+                    break;
+            }
+
+            Console.WriteLine($"Pinch: {e.Scale}, {e.ScaleOrigin}\nCurrent Scale {_currentScale}");
+
+        }
+
+        void _skiaView_Touch(object sender, SKTouchEventArgs e)
+        {
+            Console.WriteLine($"SkiaTouch:\nActionType: {e.ActionType}\nDeviceType: {e.DeviceType}\nId: {e.Id}\nLocation: {e.Location}");
+            e.Handled = true;
         }
     }
 }
