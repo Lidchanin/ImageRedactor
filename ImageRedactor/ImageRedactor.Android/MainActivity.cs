@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using ImageCircle.Forms.Plugin.Droid;
 using Plugin.CurrentActivity;
 
 namespace ImageRedactor.Droid
@@ -14,8 +15,11 @@ namespace ImageRedactor.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+
             CrossCurrentActivity.Current.Init(this, savedInstanceState);
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            ImageCircleRenderer.Init();
+
             LoadApplication(new App());
         }
 

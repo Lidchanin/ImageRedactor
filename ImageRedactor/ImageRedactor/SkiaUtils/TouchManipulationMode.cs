@@ -1,6 +1,6 @@
 ﻿namespace ImageRedactor
 {
-    enum TouchManipulationMode
+    public enum TouchManipulationMode
     {
         None,
         PanOnly,

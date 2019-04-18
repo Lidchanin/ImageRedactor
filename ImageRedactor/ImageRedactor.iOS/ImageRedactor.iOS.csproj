@@ -155,6 +155,9 @@
     <PackageReference Include="Xam.Plugin.Media">
       <Version>4.0.1.5</Version>
     </PackageReference>
+    <PackageReference Include="Xam.Plugins.Forms.ImageCircle">
+      <Version>3.0.0.5</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="3.4.0.1008975" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
@@ -235,5 +238,29 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\monkey3%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\banana1_thumbnail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\banana3_thumbnail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\mask1_thumbnail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\mask2_thumbnail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\mask3_thumbnail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\monkey1_thumbnail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\monkey2_thumbnail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\monkey3_thumbnail.png" />
   </ItemGroup>
 </Project>

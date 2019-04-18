@@ -2,8 +2,109 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:helpers="clr-namespace:ImageRedactor.Helpers;assembly=ImageRedactor"
+             xmlns:viewModels="clr-namespace:ImageRedactor.ViewModels;assembly=ImageRedactor"
+             xmlns:abstractions="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+             xmlns:imageRedactor="clr-namespace:ImageRedactor;assembly=ImageRedactor"
              x:Class="ImageRedactor.Pages.XFRealizationPage">
+
+    <!--<ContentPage.BindingContext>
+        <viewModels:XFRealizationViewModel/>
+    </ContentPage.BindingContext>-->
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
-        <Label Text="Hell world!"></Label>
+        <Grid x:Name="MainView">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Image x:Name="BackgroundImage"
+                   Source="{Binding PhotoSource}"
+                   Grid.Column="0"
+                   Grid.Row="0"
+                   Grid.RowSpan="2"/>
+
+            <ScrollView Orientation="Horizontal"
+                        Grid.Column="0"
+                        Grid.Row="1">
+                <StackLayout Orientation="Horizontal"
+                             VerticalOptions="Center">
+                    <Image Source="{x:Static helpers:ConstantHelper.Banana1ThumbnailImage}">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ThumbnailImage_OnTapped"
+                                                  CommandParameter="{x:Static helpers:ConstantHelper.Banana1Image}"
+                                                  NumberOfTapsRequired="1"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Image Source="{x:Static helpers:ConstantHelper.Banana3ThumbnailImage}">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ThumbnailImage_OnTapped"
+                                                  CommandParameter="{x:Static helpers:ConstantHelper.Banana3Image}"
+                                                  NumberOfTapsRequired="1"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Image Source="{x:Static helpers:ConstantHelper.Mask1ThumbnailImage}">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ThumbnailImage_OnTapped"
+                                                  CommandParameter="{x:Static helpers:ConstantHelper.Mask1Image}"
+                                                  NumberOfTapsRequired="1"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Image Source="{x:Static helpers:ConstantHelper.Mask2ThumbnailImage}">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ThumbnailImage_OnTapped"
+                                                  CommandParameter="{x:Static helpers:ConstantHelper.Mask2Image}"
+                                                  NumberOfTapsRequired="1"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Image Source="{x:Static helpers:ConstantHelper.Mask3ThumbnailImage}">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ThumbnailImage_OnTapped"
+                                                  CommandParameter="{x:Static helpers:ConstantHelper.Mask3Image}"
+                                                  NumberOfTapsRequired="1"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Image Source="{x:Static helpers:ConstantHelper.Monkey1ThumbnailImage}">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ThumbnailImage_OnTapped"
+                                                  CommandParameter="{x:Static helpers:ConstantHelper.Monkey1Image}"
+                                                  NumberOfTapsRequired="1"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Image Source="{x:Static helpers:ConstantHelper.Monkey2ThumbnailImage}">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ThumbnailImage_OnTapped"
+                                                  CommandParameter="{x:Static helpers:ConstantHelper.Monkey2Image}"
+                                                  NumberOfTapsRequired="1"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Image Source="{x:Static helpers:ConstantHelper.Monkey3ThumbnailImage}">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ThumbnailImage_OnTapped"
+                                                  CommandParameter="{x:Static helpers:ConstantHelper.Monkey3Image}"
+                                                  NumberOfTapsRequired="1"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                </StackLayout>
+            </ScrollView>
+
+            <Button Text="Save"
+                    Grid.Column="0"
+                    Grid.Row="2"/>
+        </Grid>
     </ContentPage.Content>
+
+    <ContentPage.Effects>
+        <imageRedactor:TouchEffect Capture="True" TouchAction="Handle_TouchAction" />
+    </ContentPage.Effects>
 </ContentPage>
