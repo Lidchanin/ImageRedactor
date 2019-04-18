@@ -221,11 +221,13 @@ namespace ImageRedactor.Pages
             }
 
             Console.WriteLine($"Pinch: {e.Scale}, {e.ScaleOrigin}\nCurrent Scale {_currentScale}");
-
         }
 
         void _skiaView_Touch(object sender, SKTouchEventArgs e)
         {
+            if (_skImage == null)
+                return;
+
             //Console.WriteLine($"SkiaTouch:\nActionType: {e.ActionType}\nDeviceType: {e.DeviceType}\nId: {e.Id}\nLocation: {e.Location}");
             e.Handled = true;
 

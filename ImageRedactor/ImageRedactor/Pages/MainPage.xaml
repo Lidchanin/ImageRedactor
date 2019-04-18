@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ImageRedactor.Pages.MainPage">
@@ -25,14 +25,14 @@
 
                 <Button x:Name="SSButton"
                         Text="SkiaSharp" 
-                        IsVisible="False"
+                        IsVisible="true"
                         Clicked="SSButton_OnClicked"
                         Grid.Column="0"
                         Grid.Row="1"/>
 
                 <Button x:Name="XFButton"
                         Text="Xamarin.Forms" 
-                        IsVisible="False"
+                        IsVisible="true"
                         Clicked="XFButton_Clicked"
                         Grid.Column="1"
                         Grid.Row="1"/>

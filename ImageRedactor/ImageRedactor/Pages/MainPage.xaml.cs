@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Xamarin.Forms;
+using Xamarin.Essentials;
 
 namespace ImageRedactor.Pages
 {
@@ -15,20 +16,21 @@ namespace ImageRedactor.Pages
 
         private async void CameraButton_OnClicked(object sender, EventArgs e)
         {
-            var photo = await Plugin.Media.CrossMedia.Current.TakePhotoAsync(
-                new Plugin.Media.Abstractions.StoreCameraMediaOptions
-                {
-                    AllowCropping = true,
-                    SaveMetaData = false
-                });
+            if (!Plugin.Media.CrossMedia.Current.IsCameraAvailable)
+            {
+                DisplayAlert("Photos Not Supported", ":( Permission not granted to photos.", "OK");
+                return;
+            }
 
-            if (photo == null) return;
+            var photo = await Plugin.Media.CrossMedia.Current.TakePhotoAsync(
+            new Plugin.Media.Abstractions.StoreCameraMediaOptions
+            {
+                AllowCropping = true,
+                SaveMetaData = false
+            });
 
             PhotoImage.Source = ImageSource.FromStream(() => photo.GetStream());
             _photoStream = photo.GetStream();
-
-            SSButton.IsVisible = true;
-            XFButton.IsVisible = true;
         }
 
         private async void SSButton_OnClicked(object sender, EventArgs e) =>
