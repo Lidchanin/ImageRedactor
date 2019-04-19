@@ -28,14 +28,6 @@
     <EmbeddedResource Include="Images\monkey3.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Pages\SSRealizationPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Pages\XFRealizationPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Effects\" />
     <Folder Include="Images\" />
     <Folder Include="SkiaUtils\" />

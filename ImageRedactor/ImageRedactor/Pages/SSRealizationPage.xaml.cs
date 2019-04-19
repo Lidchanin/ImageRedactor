@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace ImageRedactor.Pages
@@ -18,6 +19,12 @@ namespace ImageRedactor.Pages
         string[] _images;
 
         List<ImageButton> _imageButtons;
+
+        Button _saveButton;
+
+        SKBitmap _saveBitmap;
+
+        int CurrentTime => (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
 
         public SSRealizationPage(Stream photoStream)
         {
@@ -53,9 +60,14 @@ namespace ImageRedactor.Pages
 
             //var box = new BoxView();
             //box.BackgroundColor = Color.Transparent;
+            _saveButton = new Button();
+            _saveButton.Text = "SAVE";
+            _saveButton.Clicked += SaveButtonClickedHandler;
+            _saveButton.VerticalOptions = LayoutOptions.Start;
 
             var grid = new Grid();
             grid.Children.Add(_skiaView);
+            grid.Children.Add(_saveButton);
 
             var scroll = new ScrollView
             {
@@ -97,6 +109,13 @@ namespace ImageRedactor.Pages
             _skiaView.Touch += _skiaView_Touch;
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            UpdateBitmap();
+        }
+
         void Button_Clicked(object sender, EventArgs e)
         {
             var control = (ImageButton)sender;
@@ -107,7 +126,7 @@ namespace ImageRedactor.Pages
             _skImage.TouchManager.Mode = TouchManipulationMode.ScaleRotate;
             _skImage.Matrix = SKMatrix.MakeTranslation((_skiaView.CanvasSize.Width * 0.5f) - _skImage.Bitmap.Width * 0.5f, (_skiaView.CanvasSize.Height * 0.5f) - _skImage.Bitmap.Height * 0.5f);
 
-            _skiaView.InvalidateSurface();
+            UpdateBitmap();
         }
 
         void SkiaViewPaintSurfaceHangle(object sender, SKPaintSurfaceEventArgs e)
@@ -116,111 +135,32 @@ namespace ImageRedactor.Pages
             var surface = e.Surface;
             var canvas = surface.Canvas;
 
+            // Create bitmap the size of the display surface
+            if (_saveBitmap == null)
+            {
+                _saveBitmap = new SKBitmap(info.Width, info.Height);
+            }
+
+            // Render the bitmap
             canvas.Clear();
+            canvas.DrawBitmap(_saveBitmap, 0, 0);
+        }
 
-            canvas.DrawBitmap(_photoBmp, info.Rect, BitmapStretch.Uniform);
-
-            if (_skImage != null)
+        void UpdateBitmap()
+        {
+            using (SKCanvas saveBitmapCanvas = new SKCanvas(_saveBitmap))
             {
-                _skImage.Paint(canvas);
-            }
-        }
+                saveBitmapCanvas.Clear();
 
-        void Handle_TouchAction(object sender, TouchActionEventArgs args)
-        {
-            //Point pt = args.Location;
-            //SKPoint point =
-            //    new SKPoint((float)(_skiaView.CanvasSize.Width * pt.X / _skiaView.Width),
-            //                (float)(_skiaView.CanvasSize.Height * pt.Y / _skiaView.Height));
+                saveBitmapCanvas.DrawBitmap(_photoBmp, SKRect.Create(0, 0, _saveBitmap.Width, _saveBitmap.Height), BitmapStretch.Uniform);
 
-            //switch (args.Type)
-            //{
-            //    case TouchActionType.Pressed:
-            //        if (bitmap.HitTest(point))
-            //        {
-            //            touchIds.Add(args.Id);
-            //            bitmap.ProcessTouchEvent(args.Id, args.Type, point);
-            //            break;
-            //        }
-            //        break;
-
-            //    case TouchActionType.Moved:
-            //        if (touchIds.Contains(args.Id))
-            //        {
-            //            bitmap.ProcessTouchEvent(args.Id, args.Type, point);
-            //            _skiaView.InvalidateSurface();
-            //        }
-            //        break;
-
-            //    case TouchActionType.Released:
-            //    case TouchActionType.Cancelled:
-            //        if (touchIds.Contains(args.Id))
-            //        {
-            //            bitmap.ProcessTouchEvent(args.Id, args.Type, point);
-            //            touchIds.Remove(args.Id);
-            //            _skiaView.InvalidateSurface();
-            //        }
-            //        break;
-            //}
-        }
-
-        void HandleAction(View arg1, object arg2)
-        {
-        }
-
-        void PanRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e)
-        {
-            Console.WriteLine($"Pan: {new SKPoint((float)e.TotalX, (float)e.TotalY)}");
-            //Point pt = .Location;
-            //SKPoint point =
-            //new SKPoint((float)(_skiaView.CanvasSize.Width * pt.X / _skiaView.Width),
-            //(float)(_skiaView.CanvasSize.Height * pt.Y / _skiaView.Height));
-
-            switch (e.StatusType)
-            {
-                case GestureStatus.Started:
-                    //if (bitmap.HitTest(point))
-                    //{
-                    //    touchIds.Add(args.Id);
-                    //    bitmap.ProcessTouchEvent(args.Id, args.Type, point);
-                    //    break;
-                    //}
-                    break;
-                case GestureStatus.Running:
-                    break;
-                case GestureStatus.Canceled:
-                case GestureStatus.Completed:
-                    break;
-            }
-        }
-
-        float _currentScale = 1;
-        float _startScale;
-
-        void PinchRecognizer_PinchUpdated(object sender, PinchGestureUpdatedEventArgs e)
-        {
-            switch (e.Status)
-            {
-                case GestureStatus.Started:
-                    _startScale = _currentScale;
-                    //if (bitmap.HitTest(point))
-                    //{
-                    //    touchIds.Add(args.Id);
-                    //    bitmap.ProcessTouchEvent(args.Id, args.Type, point);
-                    //    break;
-                    //}
-                    break;
-                case GestureStatus.Running:
-                    _currentScale += ((float)e.Scale - 1f) * _startScale;
-                    //_currentScale = Math.Max(0f, _currentScale);
-
-                    break;
-                case GestureStatus.Canceled:
-                case GestureStatus.Completed:
-                    break;
+                if (_skImage != null)
+                {
+                    _skImage.Paint(saveBitmapCanvas);
+                }
             }
 
-            Console.WriteLine($"Pinch: {e.Scale}, {e.ScaleOrigin}\nCurrent Scale {_currentScale}");
+            _skiaView.InvalidateSurface();
         }
 
         void _skiaView_Touch(object sender, SKTouchEventArgs e)
@@ -228,13 +168,9 @@ namespace ImageRedactor.Pages
             if (_skImage == null)
                 return;
 
-            //Console.WriteLine($"SkiaTouch:\nActionType: {e.ActionType}\nDeviceType: {e.DeviceType}\nId: {e.Id}\nLocation: {e.Location}");
             e.Handled = true;
 
-            Point pt = e.Location.ToFormsPoint();
             SKPoint point = e.Location;
-            //new SKPoint((float)(_skiaView.CanvasSize.Width * pt.X / _skiaView.Width),
-            //(float)(_skiaView.CanvasSize.Height * pt.Y / _skiaView.Height));
 
             switch (e.ActionType)
             {
@@ -251,7 +187,7 @@ namespace ImageRedactor.Pages
                     if (touchIds.Contains(e.Id))
                     {
                         _skImage.ProcessTouchEvent(e.Id, e.ActionType, point);
-                        _skiaView.InvalidateSurface();
+                        UpdateBitmap();
                     }
                     break;
 
@@ -261,9 +197,22 @@ namespace ImageRedactor.Pages
                     {
                         _skImage.ProcessTouchEvent(e.Id, e.ActionType, point);
                         touchIds.Remove(e.Id);
-                        _skiaView.InvalidateSurface();
+                        UpdateBitmap();
                     }
                     break;
+            }
+        }
+
+        void SaveButtonClickedHandler(object sender, EventArgs e)
+        {
+            var format = SKEncodedImageFormat.Png;
+            var file = Path.Combine(FileSystem.AppDataDirectory, $"IMG_{CurrentTime}.{format.ToString()}");
+
+            using (SKImage image = SKImage.FromBitmap(_saveBitmap))
+            {
+                SKData data = image.Encode(format, 100);
+
+                File.WriteAllBytes(file, data.ToArray());
             }
         }
     }
