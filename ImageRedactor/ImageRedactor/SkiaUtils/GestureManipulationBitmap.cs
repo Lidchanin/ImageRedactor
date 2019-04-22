@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using SkiaSharp;
+using SkiaSharp.Views.Forms;
 
 namespace ImageRedactor
 {
     class GestureManipulationBitmap
     {
-        SKBitmap bitmap;
+        public SKBitmap Bitmap { get; private set; }
 
         Dictionary<long, TouchManipulationInfo> touchDictionary =
             new Dictionary<long, TouchManipulationInfo>();
 
         public GestureManipulationBitmap(SKBitmap bitmap)
         {
-            this.bitmap = bitmap;
+            this.Bitmap = bitmap;
             Matrix = SKMatrix.MakeIdentity();
 
             TouchManager = new TouchManipulationManager
@@ -31,7 +32,7 @@ namespace ImageRedactor
             canvas.Save();
             SKMatrix matrix = Matrix;
             canvas.Concat(ref matrix);
-            canvas.DrawBitmap(bitmap, 0, 0);
+            canvas.DrawBitmap(Bitmap, 0, 0);
             canvas.Restore();
         }
 
@@ -46,17 +47,17 @@ namespace ImageRedactor
                 SKPoint transformedPoint = inverseMatrix.MapPoint(location);
 
                 // Check if it's in the untransformed bitmap rectangle
-                SKRect rect = new SKRect(0, 0, bitmap.Width, bitmap.Height);
+                SKRect rect = new SKRect(0, 0, Bitmap.Width, Bitmap.Height);
                 return rect.Contains(transformedPoint);
             }
             return false;
         }
 
-        public void ProcessTouchEvent(long id, TouchActionType type, SKPoint location)
+        public void ProcessTouchEvent(long id, SKTouchAction type, SKPoint location)
         {
             switch (type)
             {
-                case TouchActionType.Pressed:
+                case SKTouchAction.Pressed:
                     touchDictionary.Add(id, new TouchManipulationInfo
                     {
                         PreviousPoint = location,
@@ -64,25 +65,20 @@ namespace ImageRedactor
                     });
                     break;
 
-                case TouchActionType.Moved:
+                case SKTouchAction.Moved:
                     TouchManipulationInfo info = touchDictionary[id];
                     info.NewPoint = location;
-
-                    Console.WriteLine($"ID POINT: {id}");
-                    //Console.WriteLine($"NEW POINT: {info.NewPoint}");
-                    //Console.WriteLine($"PREV POINT: {info.PreviousPoint}");
-
                     Manipulate();
                     info.PreviousPoint = info.NewPoint;
                     break;
 
-                case TouchActionType.Released:
+                case SKTouchAction.Released:
                     touchDictionary[id].NewPoint = location;
                     Manipulate();
                     touchDictionary.Remove(id);
                     break;
 
-                case TouchActionType.Cancelled:
+                case SKTouchAction.Cancelled:
                     touchDictionary.Remove(id);
                     break;
             }
@@ -98,7 +94,7 @@ namespace ImageRedactor
             {
                 SKPoint prevPoint = infos[0].PreviousPoint;
                 SKPoint newPoint = infos[0].NewPoint;
-                SKPoint pivotPoint = Matrix.MapPoint(bitmap.Width / 2, bitmap.Height / 2);
+                SKPoint pivotPoint = Matrix.MapPoint(Bitmap.Width / 2, Bitmap.Height / 2);
 
                 touchMatrix = TouchManager.OneFingerManipulate(prevPoint, newPoint, pivotPoint);
             }
@@ -108,11 +104,6 @@ namespace ImageRedactor
                 SKPoint pivotPoint = infos[pivotIndex].NewPoint;
                 SKPoint newPoint = infos[1 - pivotIndex].NewPoint;
                 SKPoint prevPoint = infos[1 - pivotIndex].PreviousPoint;
-
-                //Console.WriteLine($"pivotIndex: {pivotIndex}");
-                //Console.WriteLine($"pivotPoint: {pivotPoint}");
-                //Console.WriteLine($"newPoint: {newPoint}");
-                //Console.WriteLine($"prevPoint: {prevPoint}");
 
                 touchMatrix = TouchManager.TwoFingerManipulate(prevPoint, newPoint, pivotPoint);
             }

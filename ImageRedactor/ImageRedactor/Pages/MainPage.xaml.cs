@@ -1,12 +1,14 @@
 ﻿using System;
 using System.IO;
 using Xamarin.Forms;
+using Xamarin.Essentials;
+using Plugin.Media.Abstractions;
 
 namespace ImageRedactor.Pages
 {
     public partial class MainPage
     {
-        private Stream _photoStream;
+        MediaFile _photo;
 
         public MainPage()
         {
@@ -15,26 +17,24 @@ namespace ImageRedactor.Pages
 
         private async void CameraButton_OnClicked(object sender, EventArgs e)
         {
-            var photo = await Plugin.Media.CrossMedia.Current.TakePhotoAsync(
-                new Plugin.Media.Abstractions.StoreCameraMediaOptions
-                {
-                    AllowCropping = true,
-                    SaveMetaData = false
-                });
+            if (!Plugin.Media.CrossMedia.Current.IsCameraAvailable)
+            {
+                DisplayAlert("Photos Not Supported", ":( Permission not granted to photos.", "OK");
+                return;
+            }
 
-            if (photo == null) return;
+            _photo = await Plugin.Media.CrossMedia.Current.TakePhotoAsync(
+            new StoreCameraMediaOptions
+            {
+            });
 
-            PhotoImage.Source = ImageSource.FromStream(() => photo.GetStream());
-            _photoStream = photo.GetStream();
-
-            SSButton.IsVisible = true;
-            XFButton.IsVisible = true;
+            PhotoImage.Source = ImageSource.FromStream(() => _photo.GetStreamWithImageRotatedForExternalStorage());
         }
 
         private async void SSButton_OnClicked(object sender, EventArgs e) =>
-            await Navigation.PushAsync(new SSRealizationPage(_photoStream));
+            await Navigation.PushAsync(new SSRealizationPage(_photo?.GetStreamWithImageRotatedForExternalStorage()));
 
         private async void XFButton_Clicked(object sender, EventArgs e) =>
-            await Navigation.PushAsync(new XFRealizationPage(_photoStream));
+            await Navigation.PushAsync(new XFRealizationPage(_photo?.GetStreamWithImageRotatedForExternalStorage()));
     }
 }

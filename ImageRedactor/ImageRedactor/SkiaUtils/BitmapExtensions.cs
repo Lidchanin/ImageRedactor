@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using SkiaSharp;
 
@@ -14,6 +15,13 @@ namespace ImageRedactor
             {
                 return SKBitmap.Decode(stream);
             }
+        }
+
+        public static Stream LoadStreamResource(string resourceID)
+        {
+            var assembly = typeof(BitmapExtensions).GetTypeInfo().Assembly;
+
+            return assembly.GetManifestResourceStream(resourceID);
         }
 
         public static uint RgbaMakePixel(byte red, byte green, byte blue, byte alpha = 255)
