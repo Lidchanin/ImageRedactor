@@ -1,8 +1,9 @@
 ﻿using ImageRedactor.ViewModels;
+using ImageRedactor.XFUtils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using ImageRedactor.XFUtils;
 using Xamarin.Forms;
 
 namespace ImageRedactor.Pages
@@ -12,8 +13,8 @@ namespace ImageRedactor.Pages
         private readonly XFRealizationViewModel _viewModel;
 
         private TouchManipulationImage _image;
-        List<long> touchIds = new List<long>();
-        //private Rectangle _rectangle;
+        private readonly BoxView _boxView;
+        private readonly List<long> _touchIds = new List<long>();
 
         public XFRealizationPage(Stream photoStream)
         {
@@ -22,6 +23,19 @@ namespace ImageRedactor.Pages
             BindingContext = _viewModel;
 
             InitializeComponent();
+
+            _boxView = new BoxView
+            {
+                WidthRequest = 200,
+                HeightRequest = 200,
+                //BackgroundColor = Color.Red,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start,
+                AnchorX =0.5f,
+                AnchorY = 0.5f,
+            };
+
+            MainView.Children.Add(_boxView);
         }
 
         private void ThumbnailImage_OnTapped(object sender, EventArgs e)
@@ -39,67 +53,49 @@ namespace ImageRedactor.Pages
             {
                 Source = ImageSource.FromFile(commandParameter),
                 WidthRequest = 200,
-                HeightRequest= 200,
+                HeightRequest = 200,
+                //BackgroundColor = Color.Yellow,
+                VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start,
-                VerticalOptions = LayoutOptions.Start
+                AnchorX = 0.5f,
+                AnchorY = 0.5f,
             };
 
             MainView.Children.Add(_image);
 
-            //_rectangle = new Rectangle(0, 0, _image.Width, _image.Height);
+            _image.ImageRectangle = new Rectangle(TranslationX, TranslationY, _image.Width, _image.Height);
+            _image.ImageBoxView = _boxView;
         }
 
-        //Point _offset;
-        //private bool _isContains;
-
-        void Handle_TouchAction(object sender, TouchActionEventArgs args)
+        private void Handle_TouchAction(object sender, TouchActionEventArgs args)
         {
             var location = args.Location;
 
             switch (args.Type)
             {
                 case TouchActionType.Pressed:
+                    //Debug.WriteLine("\n------------------------------------"+_image.HitTest(location));
                     if (_image.HitTest(location))
                     {
-                        touchIds.Add(args.Id);
+                        _touchIds.Add(args.Id);
                         _image.ProcessTouchEvent(args.Id, args.Type, location);
-                        break;
                     }
-
-                    //touchIds.Add(args.Id);
-
-                    //if (!_rectangle.Contains(location.X, location.Y))
-                    //    return;
-
-                    //_isContains = true;
-                    //_offset = new Point(location.X - _image.TranslationX, location.Y - _image.TranslationY);
-
                     break;
-
                 case TouchActionType.Moved:
-                    if (touchIds.Contains(args.Id))
+                    if (_touchIds.Contains(args.Id))
                     {
                         _image.ProcessTouchEvent(args.Id, args.Type, location);
                     }
-
                     break;
-
                 case TouchActionType.Released:
                 case TouchActionType.Cancelled:
-                    //_rectangle = new Rectangle(_image.TranslationX, _image.TranslationY, _image.Width, _image.Height);
-                    //_isContains = false;
-                    //touchIds.Remove(args.Id);
-                    if (touchIds.Contains(args.Id))
+                    if (_touchIds.Contains(args.Id))
                     {
                         _image.ProcessTouchEvent(args.Id, args.Type, location);
-                        touchIds.Remove(args.Id);
+                        _touchIds.Remove(args.Id);
                     }
-
                     break;
             }
         }
-
-        private static double GetDistance(Point newPoint, Point olderPoint) =>
-            Math.Sqrt(Math.Pow((newPoint.X - olderPoint.X), 2) + Math.Pow((newPoint.Y - olderPoint.Y), 2));
     }
 }
