@@ -32,9 +32,9 @@ namespace ImageRedactor.Pages
         }
 
         private async void SSButton_OnClicked(object sender, EventArgs e) =>
-            await Navigation.PushAsync(new SSRealizationPage(_photo.GetStreamWithImageRotatedForExternalStorage()));
+            await Navigation.PushAsync(new SSRealizationPage(_photo?.GetStreamWithImageRotatedForExternalStorage()));
 
         private async void XFButton_Clicked(object sender, EventArgs e) =>
-            await Navigation.PushAsync(new XFRealizationPage(_photo.GetStreamWithImageRotatedForExternalStorage()));
+            await Navigation.PushAsync(new XFRealizationPage(_photo?.GetStreamWithImageRotatedForExternalStorage()));
     }
 }

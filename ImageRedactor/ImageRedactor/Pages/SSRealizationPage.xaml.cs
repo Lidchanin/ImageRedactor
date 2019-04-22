@@ -153,7 +153,7 @@ namespace ImageRedactor.Pages
             }
 
             // Render the bitmap
-            canvas.Clear(Color.Black.ToSKColor());
+            canvas.Clear();
             canvas.DrawBitmap(_saveBitmap, 0, 0);
         }
 
