@@ -40,17 +40,13 @@ namespace ImageRedactor
         {
             var files = Directory.GetFiles(Xamarin.Essentials.FileSystem.AppDataDirectory);
 
-            foreach (var imagePath in files)
+            foreach (var imagePath in files.Reverse())
             {
                 if (Path.GetExtension(imagePath) != ".png")
                     continue;
 
                 var imageView = new Image();
                 imageView.Source = ImageSource.FromFile(imagePath);
-
-                using (var data = new StreamReader(imagePath))
-                {
-                }
 
                 stack.Children.Add(imageView);
             }

@@ -2,12 +2,13 @@
 using System.IO;
 using Xamarin.Forms;
 using Xamarin.Essentials;
+using Plugin.Media.Abstractions;
 
 namespace ImageRedactor.Pages
 {
     public partial class MainPage
     {
-        private Stream _photoStream;
+        MediaFile _photo;
 
         public MainPage()
         {
@@ -22,21 +23,18 @@ namespace ImageRedactor.Pages
                 return;
             }
 
-            var photo = await Plugin.Media.CrossMedia.Current.TakePhotoAsync(
-            new Plugin.Media.Abstractions.StoreCameraMediaOptions
+            _photo = await Plugin.Media.CrossMedia.Current.TakePhotoAsync(
+            new StoreCameraMediaOptions
             {
-                AllowCropping = true,
-                SaveMetaData = false
             });
 
-            PhotoImage.Source = ImageSource.FromStream(() => photo.GetStream());
-            _photoStream = photo.GetStream();
+            PhotoImage.Source = ImageSource.FromStream(() => _photo.GetStreamWithImageRotatedForExternalStorage());
         }
 
         private async void SSButton_OnClicked(object sender, EventArgs e) =>
-            await Navigation.PushAsync(new SSRealizationPage(_photoStream));
+            await Navigation.PushAsync(new SSRealizationPage(_photo.GetStreamWithImageRotatedForExternalStorage()));
 
         private async void XFButton_Clicked(object sender, EventArgs e) =>
-            await Navigation.PushAsync(new XFRealizationPage(_photoStream));
+            await Navigation.PushAsync(new XFRealizationPage(_photo.GetStreamWithImageRotatedForExternalStorage()));
     }
 }
