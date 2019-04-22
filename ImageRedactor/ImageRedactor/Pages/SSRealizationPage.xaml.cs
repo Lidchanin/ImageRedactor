@@ -64,10 +64,18 @@ namespace ImageRedactor.Pages
             _saveButton.Text = "SAVE";
             _saveButton.Clicked += SaveButtonClickedHandler;
             _saveButton.VerticalOptions = LayoutOptions.Start;
+            _saveButton.HorizontalOptions = LayoutOptions.Start;
+
+            var openButtont = new Button();
+            openButtont.Text = "OPEN";
+            openButtont.Clicked += OpenButtontClickedHandler; ;
+            openButtont.VerticalOptions = LayoutOptions.Start;
+            openButtont.HorizontalOptions = LayoutOptions.End;
 
             var grid = new Grid();
             grid.Children.Add(_skiaView);
             grid.Children.Add(_saveButton);
+            grid.Children.Add(openButtont, 1, 0);
 
             var scroll = new ScrollView
             {
@@ -95,6 +103,9 @@ namespace ImageRedactor.Pages
 
             scroll.Content = stack;
             grid.Children.Add(scroll);
+
+            Grid.SetColumnSpan(scroll, 2);
+            Grid.SetColumnSpan(_skiaView, 2);
 
             Content = grid;
 
@@ -206,7 +217,7 @@ namespace ImageRedactor.Pages
         void SaveButtonClickedHandler(object sender, EventArgs e)
         {
             var format = SKEncodedImageFormat.Png;
-            var file = Path.Combine(FileSystem.AppDataDirectory, $"IMG_{CurrentTime}.{format.ToString()}");
+            var file = Path.Combine(FileSystem.AppDataDirectory, $"IMG_{CurrentTime}.{format.ToString().ToLower()}");
 
             using (SKImage image = SKImage.FromBitmap(_saveBitmap))
             {
@@ -214,6 +225,11 @@ namespace ImageRedactor.Pages
 
                 File.WriteAllBytes(file, data.ToArray());
             }
+        }
+
+        void OpenButtontClickedHandler(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new SavedImagesPage());
         }
     }
 }
