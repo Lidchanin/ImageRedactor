@@ -3,6 +3,7 @@ using Android.Content.PM;
 using Android.OS;
 using ImageCircle.Forms.Plugin.Droid;
 using Plugin.CurrentActivity;
+using Plugin.Permissions;
 
 namespace ImageRedactor.Droid
 {
@@ -16,6 +17,7 @@ namespace ImageRedactor.Droid
 
             base.OnCreate(savedInstanceState);
 
+            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             CrossCurrentActivity.Current.Init(this, savedInstanceState);
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             ImageCircleRenderer.Init();
@@ -25,7 +27,8 @@ namespace ImageRedactor.Droid
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {
-            Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 }

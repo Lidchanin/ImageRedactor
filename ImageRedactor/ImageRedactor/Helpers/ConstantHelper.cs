@@ -2,6 +2,12 @@
 {
     public static class ConstantHelper
     {
+        #region Paths
+
+        public const string PicturesFolder = "SavedImages";
+
+        #endregion Paths
+
         #region Filenames
 
         public const string Banana1Image = "banana1.png";

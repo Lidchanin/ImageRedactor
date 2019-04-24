@@ -3,6 +3,7 @@ using System.IO;
 using Xamarin.Forms;
 using Xamarin.Essentials;
 using Plugin.Media.Abstractions;
+using Plugin.Permissions.Abstractions;
 
 namespace ImageRedactor.Pages
 {
@@ -19,8 +20,8 @@ namespace ImageRedactor.Pages
         {
             if (!Plugin.Media.CrossMedia.Current.IsCameraAvailable)
             {
-                DisplayAlert("Photos Not Supported", ":( Permission not granted to photos.", "OK");
-                return;
+                //await DisplayAlert("Photos Not Supported", ":( Permission not granted to photos.", "OK");
+                await Plugin.Permissions.CrossPermissions.Current.RequestPermissionsAsync(Permission.Camera);
             }
 
             _photo = await Plugin.Media.CrossMedia.Current.TakePhotoAsync(

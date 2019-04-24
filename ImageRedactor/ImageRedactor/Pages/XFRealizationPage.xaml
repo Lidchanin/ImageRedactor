@@ -32,9 +32,10 @@
                    Source="{Binding PhotoSource}"
                    Grid.Column="0"
                    Grid.Row="0"
-                   Grid.RowSpan="2"/>
+                   Grid.RowSpan="3"/>
 
-            <ScrollView Orientation="Horizontal"
+            <ScrollView x:Name="ImageSelectorScrollView"
+                        Orientation="Horizontal"
                         Grid.Column="0"
                         Grid.Row="1">
                 <StackLayout Orientation="Horizontal"
@@ -98,7 +99,9 @@
                 </StackLayout>
             </ScrollView>
 
-            <Button Text="Save"
+            <Button x:Name="SaveButton"
+                    Text="Save"
+                    Clicked="SaveButton_OnClicked"
                     Grid.Column="0"
                     Grid.Row="2"/>
         </Grid>

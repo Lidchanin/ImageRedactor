@@ -1,9 +1,10 @@
-﻿using ImageRedactor.ViewModels;
+﻿using ImageRedactor.Services;
+using ImageRedactor.ViewModels;
 using ImageRedactor.XFUtils;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace ImageRedactor.Pages
@@ -75,6 +76,9 @@ namespace ImageRedactor.Pages
             {
                 case TouchActionType.Pressed:
                     //Debug.WriteLine("\n------------------------------------"+_image.HitTest(location));
+                    if(_image == null)
+                        return;
+
                     if (_image.HitTest(location))
                     {
                         _touchIds.Add(args.Id);
@@ -96,6 +100,23 @@ namespace ImageRedactor.Pages
                     }
                     break;
             }
+        }
+
+        private async void SaveButton_OnClicked(object sender, EventArgs e)
+        {
+            ImageSelectorScrollView.IsVisible = false;
+            SaveButton.IsVisible = false;
+
+            try
+            {
+                DependencyService.Get<IViewSnapshotService>().MakeViewSnapshotAndSave(MainView, DateTime.Now.ToFileTime() + ".png");
+            }
+            catch (Exception ex)
+            {
+            }
+
+            ImageSelectorScrollView.IsVisible = true;
+            SaveButton.IsVisible = true;
         }
     }
 }
